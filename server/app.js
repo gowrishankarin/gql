@@ -6,7 +6,7 @@ const cors = require("cors");
 // const api = require("./routes/api");
 
 const app = express();
-app.use(cors({ origin: `http://localhost:${process.env.PORT}` }));
+app.use(cors({ origin: `http://localhost:${process.env.ORIGIN_PORT}` }));
 // app.use(morgan("combined"));
 // app.use(express.json());
 
