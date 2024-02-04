@@ -10,8 +10,8 @@ const GET_PROJECTS = gql`
 
 const GET_PROJECT = gql`
   query getProject($id: ID!) {
-    id, name, status, description, client {
-      id, name, email, phone
+    project(id: $id) {
+      id, name, status, description
     }
   }
 `;
