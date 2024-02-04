@@ -20,7 +20,7 @@ const ADD_PROJECT = gql`
       name: $name
       status: $status
       description: $description
-      client: $clientId
+      clientId: $clientId
     ) {
       name,
       status,
