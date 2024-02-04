@@ -15,6 +15,8 @@ MONGO_URI=mongodb+srv://<username>:<password>@cluster0.ihyay.mongodb.net/gql?ret
 > cd server
 > docker build -t <image name>
 > docker run --dns 8.8.8.4 --dns 8.8.8.8 --expose 4000 -p 127.0.0.1:4000:4000 -it <image name>
+-alternatively-
+> docker run --dns 8.8.8.4 --dns 8.8.8.8 -p 4000:4000 --rm -it cosmos
 > cd ../client
 > npm ci
 > npm run start
