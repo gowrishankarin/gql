@@ -9,6 +9,14 @@ NODE_ENV = 'development'
 MONGO_URI=mongodb+srv://<username>:<password>@cluster0.ihyay.mongodb.net/gql?retryWrites=true&w=majority
 ```
 
+## Container Orchestration
+
+Run app using the below command
+
+```
+> docker compose up
+```
+
 ### Run FE/BE inside a docker container and FE local
 
 #### BE
@@ -47,3 +55,14 @@ MONGO_URI=mongodb+srv://<username>:<password>@cluster0.ihyay.mongodb.net/gql?ret
 > npm ci
 > npm run start
 ```
+
+## Roadmap
+
+1. JWT auth or Passport OAuth2
+2. MongoDB Atlas to Local Mongo
+3. Seed data
+4. Environments
+
+- Dev
+- Stage
+- Prod
