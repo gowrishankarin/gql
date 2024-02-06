@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  cosmos-be:
+    build: server
+    container_name: server
+    stdin_open: true
+    ports:
+      - "4000:4000"
+    dns:
+      - 8.8.8.8
+      - 8.8.8.4
+
+  cosmos-fe:
+    build: client
+    container_name: client
+    restart: always
+    ports: 
+      - "3000:3000"
