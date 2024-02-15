@@ -1,4 +1,5 @@
 import logo from './assets/logo.png';
+import Login from './oauth2/Login';
 
 export default function Header() {
   return (
@@ -10,6 +11,7 @@ export default function Header() {
             <div>Project GQL</div>
           </div>
         </a>
+        <Login />
       </div>
     </nav>
   );
