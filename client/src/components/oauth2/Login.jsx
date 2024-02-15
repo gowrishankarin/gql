@@ -16,9 +16,7 @@ function Login() {
       <FcGoogle 
         onClick={handleGoogleLogin}
         style={{
-          fontSize: '3rem',
-          border: "1px solid #fff",
-          padding:"1rep"
+          fontSize: '1.5rem',
         }}
       />
     </>
