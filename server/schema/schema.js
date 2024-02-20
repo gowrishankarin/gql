@@ -13,6 +13,14 @@ const {
   GraphQLEnumType,
 } = require('graphql')
 
+// Client type
+const AuthResponseType = new GraphQLObjectType({
+  name: 'AuthResponse',
+  fields: () => ({
+    accessToken: { type: GraphQLString },
+    refreshToken: { type: GraphQLString },
+  })
+});
 
 // Client type
 const ClientType = new GraphQLObjectType({
@@ -78,6 +86,18 @@ const RootQuery = new GraphQLObjectType({
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
+    signUpGoogle: {
+      type: AuthResponseType,
+      args: {
+        accessToken: { type: GraphQLNonNull(GraphQLString) }
+      },
+      resolve(parent, args) {
+        return {
+          accessToken: 'accessToken',
+          refreshToken: 'refreshToken'
+        };
+      }
+    },
     // Add a client
     addClient: {
       type: ClientType,
