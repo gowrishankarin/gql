@@ -1,4 +1,4 @@
-import axios from 'axios';
+const axios = require('axios');
 
 async function getGoogleProfile(access_token) {
   try {
@@ -19,4 +19,4 @@ async function getGoogleProfile(access_token) {
   }
 }
 
-export default getGoogleProfile;
+module.exports =  getGoogleProfile;
