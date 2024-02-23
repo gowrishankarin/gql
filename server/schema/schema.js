@@ -106,30 +106,40 @@ const mutation = new GraphQLObjectType({
       },
       async resolve(_, args, ctx) {
 
-        const { models, req, res } = ctx;
-        // const { User } = models; 
+        var req = new Request('', options = {
+          method: ctx.method,
+          headers: ctx.headers,
+          body: {access_token: args.accessToken},
+        });
 
-        let newReq = { body: null}
-        if(req) {
-          newReq.body = {
-            ...req.body,
-            access_token: args.accessToken,
-          };
-        } else {
-          newReq.body = {
-            access_token: args.accessToken
-          }
-        }
+        // const { models, req, res } = ctx;
+        // // const { User } = models; 
+
+        // let newReq = { body: null, next: (response) => {
+        //   console.log({response})
+        // }}
+        // if(req) {
+        //   newReq.body = {
+        //     ...req.body,
+        //     access_token: args.accessToken,
+        //   };
+        // } else {
+        //   newReq.body = {
+        //     access_token: args.accessToken,
+        //     refresh_token: ''
+        //   }
+        // }
         
-
-        console.log(newReq)
-
-
         try {
-          const { data, info } = await authenticateGoogle(newReq, res); 
-          const profile = await getGoogleProfile(accessToken);
+          const { data, info } = await authenticateGoogle(newReq, res)
+          // .then(res => {
+          //   console.log({res})
+          // }).catch(err => {
+          //   console.log({err});
+          // }); 
+          const profile = await getGoogleProfile(args.accessToken);
 
-          console.log({ profile });
+          console.log({ profile, data, info });
 
           if (info) {
             switch (info.code) {

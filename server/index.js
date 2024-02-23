@@ -5,6 +5,7 @@ const { graphqlHTTP } = require('express-graphql');
 const schema = require('./schema/schema');
 const { mongoConnect } = require("./config/db");
 const PORT = process.env.PORT || 5000;
+const passport = require('passport');
 
 const app = require("./app");
 
@@ -14,6 +15,9 @@ app.use('/graphql', graphqlHTTP({
   schema,
   graphiql: process.env.NODE_ENV === 'development'
 }))
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 const startServer = async () => {
   await mongoConnect();
