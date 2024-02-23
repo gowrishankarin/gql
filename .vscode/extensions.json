@@ -1,0 +1,23 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "stylelint.vscode-stylelint",
+    "clinyong.vscode-css-modules",
+    "neotan.vscode-auto-restart-typescript-eslint-servers",
+    "mxsdev.typescript-explorer",
+    "mongodb.mongodb-vscode",
+    "humao.rest-client",
+    "leizongmin.node-module-intellisense",
+    "CoenraadS.bracket-pair-colorizer-2",
+    "mikestead.dotenv",
+    "formulahendry.auto-complete-tag",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "eamodio.gitlens",
+    "christian-kohler.npm-intellisense",
+    "tabnine.tabnine-vscode",
+    "streetsidesoftware.code-spell-checker"
+
+  ]
+}
