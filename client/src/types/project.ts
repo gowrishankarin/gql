@@ -7,4 +7,4 @@ export type Project = {
   status: ProjectStatus;
   description: string;
   client: Client;
-}
+};
