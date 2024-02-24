@@ -1,17 +1,23 @@
-import { useState } from 'react';
-import { FaUser } from 'react-icons/fa';
-import { useMutation } from '@apollo/client';
-import { ADD_CLIENT } from '../mutations/clientMutations';
-import { GET_CLIENTS } from '../queries/clientQueries';
+import { useState } from "react";
+import { FaUser } from "react-icons/fa";
+import { useMutation } from "@apollo/client";
+import { ADD_CLIENT } from "../mutations/clientMutations";
+import { GET_CLIENTS } from "../queries/clientQueries";
+import { Button, Modal } from "antd";
 
 export default function AddClientModal() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   const [addClient] = useMutation(ADD_CLIENT, {
     variables: { name, email, phone },
     update(cache, { data: { addClient } }) {
+      setConfirmLoading(false);
+      setIsModalOpen(false);
       const { clients } = cache.readQuery({ query: GET_CLIENTS });
 
       cache.writeQuery({
@@ -21,98 +27,75 @@ export default function AddClientModal() {
     },
   });
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (name === '' || email === '' || phone === '') {
-      return alert('Please fill in all fields');
+    setConfirmLoading(true);
+    if (name === "" || email === "" || phone === "") {
+      return alert("Please fill in all fields");
     }
 
     addClient(name, email, phone);
 
-    setName('');
-    setEmail('');
-    setPhone('');
+    setName("");
+    setEmail("");
+    setPhone("");
   };
 
   return (
     <>
-      <button
-        type='button'
-        className='btn btn-secondary'
-        data-bs-toggle='modal'
-        data-bs-target='#addClientModal'
-      >
-        <div className='d-flex align-items-center'>
-          <FaUser className='icon' />
-          <div>Add Client</div>
-        </div>
-      </button>
+      <Button type="primary" icon={<FaUser />} onClick={showModal}>
+        Add client
+      </Button>
 
-      <div
-        className='modal fade'
-        id='addClientModal'
-        aria-labelledby='addClientModalLabel'
-        aria-hidden='true'
+      <Modal
+        title="Add client"
+        open={isModalOpen}
+        onCancel={handleCancel}
+        onOk={onSubmit}
+        confirmLoading={confirmLoading}
       >
-        <div className='modal-dialog'>
-          <div className='modal-content'>
-            <div className='modal-header'>
-              <h5 className='modal-title' id='addClientModalLabel'>
-                Add Client
-              </h5>
-              <button
-                type='button'
-                className='btn-close'
-                data-bs-dismiss='modal'
-                aria-label='Close'
-              ></button>
-            </div>
-            <div className='modal-body'>
-              <form onSubmit={onSubmit}>
-                <div className='mb-3'>
-                  <label className='form-label'>Name</label>
-                  <input
-                    type='text'
-                    className='form-control'
-                    id='name'
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-                <div className='mb-3'>
-                  <label className='form-label'>Email</label>
-                  <input
-                    type='email'
-                    className='form-control'
-                    id='email'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className='mb-3'>
-                  <label className='form-label'>Phone</label>
-                  <input
-                    type='text'
-                    className='form-control'
-                    id='phone'
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                </div>
-
-                <button
-                  type='submit'
-                  data-bs-dismiss='modal'
-                  className='btn btn-secondary'
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
+        <form>
+          <div className="mb-3">
+            <label className="form-label">Name</label>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
-        </div>
-      </div>
+          <div className="mb-3">
+            <label className="form-label">Email</label>
+            <input
+              type="email"
+              className="form-control"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Phone</label>
+            <input
+              type="text"
+              className="form-control"
+              id="phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+        </form>
+      </Modal>
     </>
   );
 }
