@@ -7,6 +7,7 @@ import { Button, Modal } from "antd";
 
 export default function AddClientModal() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,6 +16,8 @@ export default function AddClientModal() {
   const [addClient] = useMutation(ADD_CLIENT, {
     variables: { name, email, phone },
     update(cache, { data: { addClient } }) {
+      setConfirmLoading(false);
+      setIsModalOpen(false);
       const { clients } = cache.readQuery({ query: GET_CLIENTS });
 
       cache.writeQuery({
@@ -35,6 +38,7 @@ export default function AddClientModal() {
   const onSubmit = (e) => {
     e.preventDefault();
 
+    setConfirmLoading(true);
     if (name === "" || email === "" || phone === "") {
       return alert("Please fill in all fields");
     }
@@ -57,8 +61,13 @@ export default function AddClientModal() {
         Add client
       </Button>
 
-      <Modal open={isModalOpen} onCancel={handleCancel}>
-        <form onSubmit={onSubmit}>
+      <Modal
+        open={isModalOpen}
+        onCancel={handleCancel}
+        onOk={onSubmit}
+        confirmLoading={confirmLoading}
+      >
+        <form>
           <div className="mb-3">
             <label className="form-label">Name</label>
             <input
@@ -89,14 +98,6 @@ export default function AddClientModal() {
               onChange={(e) => setPhone(e.target.value)}
             />
           </div>
-
-          <button
-            type="submit"
-            data-bs-dismiss="modal"
-            className="btn btn-secondary"
-          >
-            Submit
-          </button>
         </form>
       </Modal>
     </>
