@@ -9,5 +9,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.stylelint": "explicit"
   },
-  "files.autoSave": "afterDelay"
+  "files.autoSave": "off",
+  "editor.formatOnSaveMode": "modifications",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true
 }

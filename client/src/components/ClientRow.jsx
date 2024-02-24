@@ -2,6 +2,7 @@ import { FaTrash } from 'react-icons/fa';
 import { useMutation } from '@apollo/client';
 import { DELETE_CLIENT } from '../mutations/clientMutations';
 import { GET_CLIENTS } from '../queries/clientQueries';
+import { Button } from "antd";
 
 function ClientRow({ client }) {
 
@@ -16,10 +17,10 @@ function ClientRow({ client }) {
       });
       cache.writeQuery({
         query: GET_CLIENTS,
-        data: { 
-          clients: clients.filter(client => client.id !== deleteClient.id)
-        }
-      })
+        data: {
+          clients: clients.filter((client) => client.id !== deleteClient.id),
+        },
+      });
     }
   })
 
@@ -29,12 +30,12 @@ function ClientRow({ client }) {
       <td>{client.email}</td>
       <td>{client.phone}</td>
       <td>
-        <button className='btn btn-danger btn-sm' onClick={deleteClient}>
+        <Button danger onClick={deleteClient}>
           <FaTrash />
-        </button>
+        </Button>
       </td>
     </tr>
-  )
+  );
 }
 
 export default ClientRow
