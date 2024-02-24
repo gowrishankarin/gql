@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { FaList } from 'react-icons/fa';
 import { useMutation, useQuery } from '@apollo/client';
-import { ADD_PROJECT } from '../mutations/projectMutations';
-import { GET_PROJECTS } from '../queries/projectQueries';
-import { GET_CLIENTS } from '../queries/clientQueries';
+
 import { Button, Modal } from "antd";
+
+import { ADD_PROJECT } from "../mutations/projectMutations";
+import { GET_PROJECTS } from "../queries/projectQueries";
+import { GET_CLIENTS } from "../queries/clientQueries";
+
 
 export default function AddProjectModal() {
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -27,6 +30,7 @@ export default function AddProjectModal() {
     variables: { name, description, clientId, status },
     update(cache, { data: { addProject } }) {
       setConfirmLoading(false);
+      setIsModalOpen(false);
       const { projects } = cache.readQuery({ query: GET_PROJECTS });
       cache.writeQuery({
         query: GET_PROJECTS,
@@ -67,7 +71,7 @@ export default function AddProjectModal() {
           </Button>
 
           <Modal
-            title="Add client"
+            title="Add project"
             open={isModalOpen}
             onCancel={handleCancel}
             onOk={onSubmit}
