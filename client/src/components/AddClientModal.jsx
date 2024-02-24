@@ -52,16 +52,12 @@ export default function AddClientModal() {
 
   return (
     <>
-      <Button
-        title="Add client"
-        type="primary"
-        icon={<FaUser />}
-        onClick={showModal}
-      >
+      <Button type="primary" icon={<FaUser />} onClick={showModal}>
         Add client
       </Button>
 
       <Modal
+        title="Add client"
         open={isModalOpen}
         onCancel={handleCancel}
         onOk={onSubmit}
