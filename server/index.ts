@@ -1,13 +1,14 @@
-const http = require("http");
-const colors = require('colors');
-require('dotenv').config();
-const { graphqlHTTP } = require('express-graphql');
-const schema = require('./schema/schema');
-const { mongoConnect } = require("./config/db");
+import http from "http"
+import colors from 'colors';
+import dotenv from 'dotenv';
+dotenv.config();  // Load environment variables from .env file
+import { graphqlHTTP } from 'express-graphql';
+import schema from './schema/schema';
+import { mongoConnect } from "./config/db";
 const PORT = process.env.PORT || 5000;
-const passport = require('passport');
+import passport from 'passport';
 
-const app = require("./app");
+import app from "./app";
 
 const server = http.createServer(app);
 
@@ -16,8 +17,8 @@ app.use('/graphql', graphqlHTTP({
   graphiql: process.env.NODE_ENV === 'development'
 }))
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 const startServer = async () => {
   await mongoConnect();
