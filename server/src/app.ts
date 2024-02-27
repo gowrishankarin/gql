@@ -1,6 +1,6 @@
-const express = require("express");
+import express from "express";
 // const path = require("path");
-const cors = require("cors");
+import cors from "cors";
 // const morgan = require("morgan");
 
 // const api = require("./routes/api");
@@ -13,4 +13,4 @@ app.use(cors({ origin: `http://localhost:${process.env.ORIGIN_PORT}` }));
 // app.use(express.static(path.join(__dirname, "..", "public")));
 // app.use("/v1", api);
 
-module.exports = app;
+export default app;
