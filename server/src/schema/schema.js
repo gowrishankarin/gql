@@ -1,7 +1,7 @@
 const { projects, clients } = require("../../sampleData.js");
 
-const Project = require("../models/Project.js");
-const Client = require("../models/Client.js");
+import Project from "../models/Project";
+import Client from "../models/Client";
 const authenticateGoogle = require("../auth/google.auth.js");
 const getGoogleProfile = require("../auth/google.profile.js");
 
