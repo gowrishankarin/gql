@@ -1,6 +1,6 @@
-const passport = require("passport");
+import passport from "passport";
 // var GoogleStrategy = require("passport-google-oauth20").Strategy;
-var GoogleStrategy = require("passport-google-token").Strategy;
+import { Strategy as GoogleStrategy } from "passport-google-token";
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -23,7 +23,7 @@ passport.use(
   )
 );
 
-const authenticateGoogle = (req, res) =>
+export default function authenticateGoogle(req, res) {
   new Promise((resolve, reject) => {
     passport
       .authenticate(
@@ -48,5 +48,4 @@ const authenticateGoogle = (req, res) =>
         console.log({ error });
       });
   });
-
-module.exports = authenticateGoogle;
+}

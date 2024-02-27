@@ -2,8 +2,8 @@ const { projects, clients } = require("../../sampleData.js");
 
 import Project from "../models/Project";
 import Client from "../models/Client";
-const authenticateGoogle = require("../auth/google.auth.js");
-const getGoogleProfile = require("../auth/google.profile.js");
+import authenticateGoogle from "../auth/google.auth";
+import getGoogleProfile from "../auth/google.profile";
 
 const {
   GraphQLObjectType,
@@ -309,7 +309,7 @@ const mutation = new GraphQLObjectType({
   },
 });
 
-module.exports = new GraphQLSchema({
+export default new GraphQLSchema({
   query: RootQuery,
   mutation,
 });
