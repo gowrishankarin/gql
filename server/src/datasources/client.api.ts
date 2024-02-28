@@ -14,7 +14,7 @@ class ClientAPI extends MongoDataSource<ClientDocument> {
   }
 
   getClient(clientId: string): Promise<ClientDocument | null>  {
-    const client = this.collection.findOne();
+    const client = this.findOneById(clientId);
     return client;
   }
 

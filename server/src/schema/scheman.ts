@@ -6,6 +6,7 @@ export const typeDefs = gql`
     project(id: ID!): Project
     projects: [Project!]!
     client(id: ID!): Client
+    clients: [Client!]!
   }
 
   type Project {

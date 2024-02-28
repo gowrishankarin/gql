@@ -8,7 +8,15 @@ export const resolvers = {
     },
     project: (_: any, { id }: any,  { dataSources }: any) => {
       return dataSources.projectAPI.getProject(id);
-    }
+    },
+    clients: async (_: any, __: any, { dataSources }: any) => {
+      let clients = await dataSources.clientAPI.findAll();
+      return clients;
+    },
+    client: (_: any, { id }: any,  { dataSources }: any) => {
+      return dataSources.clientAPI.getClient(id);
+    },
+
   },
   Project: {
     id: async (parent: any) => {
