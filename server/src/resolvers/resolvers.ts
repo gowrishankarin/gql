@@ -13,10 +13,16 @@ export const resolvers = {
   Project: {
     id: async (parent: any) => {
       return parent._id;
+    },
+    client: async (parent: any, args: any, { dataSources }: any) => {
+      const client = await dataSources.clientAPI.getClient(parent.clientId);
+      return client;
     }
-    // client: (parent: any, args: any, { dataSources }: any) => {
-    //   return {};
-    // }
+  },
+  Client: {
+    id: async (parent: any) => {
+      return parent._id;
+    },
   }
 }
 

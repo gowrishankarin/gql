@@ -10,6 +10,7 @@ import { mongoConnect } from "./config/db";
 const PORT = process.env.PORT || 5000;
 
 import ProjectAPI from "./datasources/project.api";
+import ClientAPI from "./datasources/client.api";
 
 async function startApolloServer() {
   const client = await mongoConnect();
@@ -32,8 +33,10 @@ async function startApolloServer() {
         ...userInfo,
         dataSources: {
           projectAPI: new ProjectAPI({
-            modelOrCollection: client.db().collection('projects')
-            // cache: new InMemoryLRUCache({ maxSize: 100 }) as KeyValueCache<ProjectDocument>
+            modelOrCollection: client.db().collection('projects'),
+          }),
+          clientAPI: new ClientAPI({
+            modelOrCollection: client.db().collection('clients'),
           }),
         },
       };

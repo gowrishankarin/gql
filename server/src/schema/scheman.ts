@@ -5,6 +5,7 @@ export const typeDefs = gql`
   type Query {
     project(id: ID!): Project
     projects: [Project!]!
+    client(id: ID!): Client
   }
 
   type Project {
@@ -12,7 +13,7 @@ export const typeDefs = gql`
     name: String!
     description: String!
     status: String!
-    clientId: ID!
+    client: Client
   }
 
   type Client {
