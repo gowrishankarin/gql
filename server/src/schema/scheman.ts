@@ -8,7 +8,7 @@ export const typeDefs = gql`
   }
 
   type Project {
-    _id: ID!
+    id: ID!
     name: String!
     description: String!
     status: String!

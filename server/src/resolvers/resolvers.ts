@@ -11,6 +11,9 @@ export const resolvers = {
     }
   },
   Project: {
+    id: async (parent: any) => {
+      return parent._id;
+    }
     // client: (parent: any, args: any, { dataSources }: any) => {
     //   return {};
     // }

@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 const GET_PROJECTS = gql`
   query getProjects {
     projects {
-      _id
+      id
       name
       status
       description
