@@ -1,34 +1,48 @@
-import http from "http"
 import colors from 'colors';
 import dotenv from 'dotenv';
 dotenv.config();  // Load environment variables from .env file
-import { graphqlHTTP } from 'express-graphql';
-import schema from './schema/schema';
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+
+import { typeDefs } from "./schema/scheman";
+import { resolvers } from "./resolvers/resolvers";
 import { mongoConnect } from "./config/db";
 const PORT = process.env.PORT || 5000;
-import passport from 'passport';
 
-import app from "./app";
+import ProjectAPI from "./datasources/project.api";
 
-const server = http.createServer(app);
+async function startApolloServer() {
+  const client = await mongoConnect();
+  const server = await new ApolloServer({
+    typeDefs,
+    resolvers,
 
-app.use('/graphql', graphqlHTTP({
-  schema,
-  graphiql: process.env.NODE_ENV === 'development'
-}))
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-const startServer = async () => {
-  await mongoConnect();
-  // await loadPlanetsData();
-  // await loadLaunchData();
-  server.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
   });
-  // httpsServer.listen(process.env.HTTPS_PORT, () => {
-  //   console.log(`Secured Server is listening on port ${PORT + 1}`);
-  // });
-};
-startServer();
+
+  const { url } = await startStandaloneServer(server, {
+    context: async ({ req }) => {
+      const token = req.headers.authorization || "";
+      const userId = token.split(" ")[1];
+      let userInfo = {};
+      if (userId) {
+        userInfo = { userId: "Shankar", userRole: "Host" };
+      }
+      const { cache } = server;
+      return {
+        ...userInfo,
+        dataSources: {
+          projectAPI: new ProjectAPI({
+            modelOrCollection: client.db().collection('projects')
+            // cache: new InMemoryLRUCache({ maxSize: 100 }) as KeyValueCache<ProjectDocument>
+          }),
+        },
+      };
+    },
+  });
+  console.log(`
+    🚀  Server is running!
+    📭  Query at ${url}
+  `);
+}
+
+startApolloServer();
