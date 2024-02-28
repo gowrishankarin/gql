@@ -4,14 +4,15 @@ import { gql } from "graphql-tag";
 export const typeDefs = gql`
   type Query {
     project(id: ID!): Project
+    projects: [Project!]!
   }
 
   type Project {
-    id: ID!
+    _id: ID!
     name: String!
     description: String!
     status: String!
-    client: Client
+    clientId: ID!
   }
 
   type Client {

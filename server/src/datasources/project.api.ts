@@ -17,6 +17,11 @@ class ProjectAPI extends MongoDataSource<ProjectDocument> {
   getProject(projectId: string): Promise<ProjectDocument | null>  {
     return this.findOneById(projectId);
   }
+
+  async findAll(): Promise<ProjectDocument[]> {
+    const projectsCursor = this.collection.find({});
+    return await projectsCursor.toArray()
+  }
 }
 
 export default ProjectAPI;
