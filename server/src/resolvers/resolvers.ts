@@ -40,14 +40,17 @@ export const resolvers = {
       }: any,
       { dataSources }: any
     ) => {
-      const project = await dataSources.projectAPI.update({
+      const updateResult = await dataSources.projectAPI.update({
         id, name, description, status, clientId
       });
+      console.log({updateResult})
+      const project = await dataSources.projectAPI.getProject(id)
       return project;
     },
     deleteProject: async (_: any, { id }: any, { dataSources }: any) => {
-      const project = await dataSources.projectAPI.delete(id);
-      return project;
+      const deleteResult = await dataSources.projectAPI.delete(id);
+      console.log({deleteResult})
+      return { id };
     },
     addClient: async (_: any, __: any, { dataSources }: any) => {
     },

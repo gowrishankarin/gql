@@ -1,7 +1,7 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb';
 import { model, Schema, Types } from 'mongoose';
 
-import { ObjectId } from 'mongodb';
+import { DeleteResult, ObjectId, UpdateResult } from 'mongodb';
 
 interface ProjectDocument {
   _id: ObjectId;
@@ -60,13 +60,13 @@ class ProjectAPI extends MongoDataSource<ProjectDocument> {
   }
 
   async update({
-    _id,
+    id,
     name,
     description,
     status,
     clientId,
-  }): Promise<ProjectDocument | null> {
-    return await this.collection.updateOne({ _id }, {
+  }): Promise<UpdateResult<ProjectDocument>> {
+    const result = this.collection.updateOne({ "_id": id }, {
       $set: {
         name,
         description,
@@ -74,10 +74,15 @@ class ProjectAPI extends MongoDataSource<ProjectDocument> {
         clientId,
       },
     });
+
+    console.log({result})
+    return result;
   }
 
-  async delete(_id: string): Promise<ProjectDocument | null> {
-    return await this.collection.deleteOne({ _id });
+  async delete(id: ObjectId): Promise<DeleteResult | null> {
+    const result = this.collection.deleteOne({ "_id": id });
+
+    return result;
   }
 }
 
