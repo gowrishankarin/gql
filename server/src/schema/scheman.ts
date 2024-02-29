@@ -9,6 +9,36 @@ export const typeDefs = gql`
     clients: [Client!]!
   }
 
+  type Mutation {
+    addProject(
+      name: String!,
+      description: String!,
+      status: String!,
+      clientId: ID!
+    ): Project!
+    updateProject(
+      id: ID!,
+      name: String!,
+      description: String!,
+      status: String!,
+      clientId: ID!
+    ) : Project!
+    deleteProject(id: ID!): Project!
+
+    addClient(
+      name: String!,
+      email: String!,
+      phone: String!
+    ): Client!
+    updateClient(
+      id: ID!,
+      name: String,
+      email: String,
+      phone: String
+    ): Client!
+    deleteClient(id: ID!): Client!
+  }
+
   type Project {
     id: ID!
     name: String!

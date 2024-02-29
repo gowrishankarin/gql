@@ -34,9 +34,11 @@ async function startApolloServer() {
         dataSources: {
           projectAPI: new ProjectAPI({
             modelOrCollection: client.db().collection('projects'),
+            cache,
           }),
           clientAPI: new ClientAPI({
             modelOrCollection: client.db().collection('clients'),
+            cache
           }),
         },
       };

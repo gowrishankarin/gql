@@ -18,6 +18,44 @@ export const resolvers = {
     },
 
   },
+  Mutation: {
+    addProject: async (
+      _: any,
+      {
+        name, description, status, clientId
+      }: any,
+      { dataSources }: any
+   ) => {
+      const project = await dataSources.projectAPI.create({
+        name, description, status, clientId
+      });
+
+      console.log({project})
+      return project;
+    },
+    updateProject: async (
+      _: any,
+      {
+        id, name, description, status, clientId
+      }: any,
+      { dataSources }: any
+    ) => {
+      const project = await dataSources.projectAPI.update({
+        id, name, description, status, clientId
+      });
+      return project;
+    },
+    deleteProject: async (_: any, { id }: any, { dataSources }: any) => {
+      const project = await dataSources.projectAPI.delete(id);
+      return project;
+    },
+    addClient: async (_: any, __: any, { dataSources }: any) => {
+    },
+    updateClient: async (_: any, __: any, { dataSources }: any) => {
+    },
+    deleteClient: async (_: any, __: any, { dataSources }: any) => {
+    }
+  },
   Project: {
     id: async (parent: any) => {
       return parent._id;

@@ -22,6 +22,18 @@ class ClientAPI extends MongoDataSource<ClientDocument> {
     const clientsCursor = this.collection.find({});
     return await clientsCursor.toArray()
   }
+
+  create(): Promise<ClientDocument | null> {
+    return null;
+  }
+
+  update(): Promise<ClientDocument | null> {
+    return null;
+  }
+
+  delete(): Promise<ClientDocument | null> {
+    return null;
+  }
 }
 
 export default ClientAPI;
