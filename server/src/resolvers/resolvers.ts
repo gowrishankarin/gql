@@ -52,11 +52,26 @@ export const resolvers = {
       console.log({deleteResult})
       return { id };
     },
-    addClient: async (_: any, __: any, { dataSources }: any) => {
+    addClient: async (_: any, {name, email, phone}: any, { dataSources }: any) => {
+      const client = await dataSources.clientAPI.create({
+        name, email, phone
+      });
+
+      console.log({client})
+      return client;
     },
-    updateClient: async (_: any, __: any, { dataSources }: any) => {
+    updateClient: async (_: any, { id, name, email, phone}: any, { dataSources }: any) => {
+      const updateResult = await dataSources.clientAPI.update({
+        id, name, email, phone
+      });
+      console.log({updateResult})
+      const client = await dataSources.clientAPI.getClient(id)
+      return client;
     },
-    deleteClient: async (_: any, __: any, { dataSources }: any) => {
+    deleteClient: async (_: any, { id }: any, { dataSources }: any) => {
+      const deleteResult = await dataSources.clientAPI.delete(id);
+      console.log({deleteResult})
+      return { id };
     }
   },
   Project: {
