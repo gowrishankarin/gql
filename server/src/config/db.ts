@@ -16,10 +16,10 @@ export const mongoConnect = async () => {
 
   try {
     const client = new MongoClient(process.env.MONGO_URI)
-    const connection = await client.connect();
+    const connection: MongoClient = await client.connect();
 
     console.log(
-      `Pinged your deployment. You successfully connected to MongoDB! at ${connection.s.url}`
+      `Pinged your deployment. You successfully connected to MongoDB! at ${client.s.url}`
     );
     return client;
   } catch (err) {

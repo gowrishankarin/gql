@@ -23,8 +23,12 @@ export const resolvers = {
       return parent._id;
     },
     client: async (parent: any, args: any, { dataSources }: any) => {
-      const client = await dataSources.clientAPI.getClient(parent.clientId);
-      return client;
+      try {
+        const client = await dataSources.clientAPI.getClient(parent.clientId);
+        return client;
+      } catch (error) {
+        return error;
+      }
     }
   },
   Client: {
