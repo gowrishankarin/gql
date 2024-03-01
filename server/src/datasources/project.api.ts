@@ -71,7 +71,6 @@ class ProjectAPI extends MongoDataSource<ProjectDocument> {
     name,
     description,
     status,
-    clientId,
   }): Promise<UpdateResult<ProjectDocument>> {
     const result = this.collection.updateOne(
       { _id: id },
@@ -80,7 +79,6 @@ class ProjectAPI extends MongoDataSource<ProjectDocument> {
           name,
           description,
           status,
-          clientId,
         },
       }
     );

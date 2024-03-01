@@ -41,7 +41,7 @@ const UPDATE_PROJECT = gql`
   mutation UpdateProject(
     $id: ID!
     $name: String!
-    $status: ProjectStatusUpdate!
+    $status: String!
     $description: String!
   ) {
     updateProject(

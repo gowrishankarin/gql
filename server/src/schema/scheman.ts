@@ -11,31 +11,21 @@ export const typeDefs = gql`
 
   type Mutation {
     addProject(
-      name: String!,
-      description: String!,
-      status: String!,
+      name: String!
+      description: String!
+      status: String!
       clientId: ID!
     ): Project!
     updateProject(
-      id: ID!,
-      name: String!,
-      description: String!,
-      status: String!,
-      clientId: ID!
-    ) : Project!
+      id: ID!
+      name: String!
+      description: String!
+      status: String!
+    ): Project!
     deleteProject(id: ID!): Project!
 
-    addClient(
-      name: String!,
-      email: String!,
-      phone: String!
-    ): Client!
-    updateClient(
-      id: ID!,
-      name: String,
-      email: String,
-      phone: String
-    ): Client!
+    addClient(name: String!, email: String!, phone: String!): Client!
+    updateClient(id: ID!, name: String, email: String, phone: String): Client!
     deleteClient(id: ID!): Client!
   }
 
@@ -53,4 +43,4 @@ export const typeDefs = gql`
     email: String!
     phone: String!
   }
-`
+`;
