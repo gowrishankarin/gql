@@ -75,16 +75,15 @@ class ProjectAPI extends MongoDataSource<ProjectDocument> {
     description,
     status,
   }): Promise<UpdateResult<ProjectDocument>> {
-    const result = this.collection.updateOne(
-      { _id: id },
+    const result = await this.collection.updateOne(
+      { _id: new ObjectId(id) },
       {
         $set: {
-          name,
-          description,
-          status,
+          name: name,
+          description: description,
+          status: status,
         },
-      },
-      { upsert: false }
+      }
     );
 
     return result;

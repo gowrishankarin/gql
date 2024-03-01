@@ -24,6 +24,7 @@ const ADD_PROJECT = gql`
       description: $description
       clientId: $clientId
     ) {
+      id
       name
       status
       description
