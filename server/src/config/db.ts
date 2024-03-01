@@ -19,7 +19,9 @@ export const mongoConnect = async () => {
     const connection: MongoClient = await client.connect();
 
     console.log(
-      `Pinged your deployment. You successfully connected to MongoDB! at ${client.s.url}`
+      `Pinged your deployment. You successfully connected to MongoDB! at ${
+        (client as any).s.url
+      }`
     );
     return client;
   } catch (err) {

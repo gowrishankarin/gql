@@ -1,10 +1,10 @@
 import { MongoDataSource  } from "apollo-datasource-mongodb";
-import { ObjectId, UpdateResult, DeleteResult } from "mongodb";
+import { UpdateResult, DeleteResult, InsertOneResult } from "mongodb";
 import { model, Schema, Types } from 'mongoose';
 
 
 interface ClientDocument {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   name: string;
   email: string;
   phone: string;
@@ -39,13 +39,12 @@ class ClientAPI extends MongoDataSource<ClientDocument> {
     return await clientsCursor.toArray()
   }
 
-  create({ name, email, phone }): Promise<ClientDocument | null> {
+  async create({ name, email, phone }): Promise<InsertOneResult<ClientDocument | null>> {
     try {
-      const client = new Client({ name, email, phone});
-      const result = this.collection.insertOne(client as ClientDocument, {
+      const result = await this.collection.insertOne({ name, email, phone} as ClientDocument, {
         forceServerObjectId: false,
       });
-      return client;
+      return result;
     } catch (err) {
       return err;
     }

@@ -53,11 +53,12 @@ export const resolvers = {
       return { id };
     },
     addClient: async (_: any, {name, email, phone}: any, { dataSources }: any) => {
-      const client = await dataSources.clientAPI.create({
+      const createResult = await dataSources.clientAPI.create({
         name, email, phone
       });
 
-      console.log({client})
+      const client = await dataSources.clientAPI.getClient(createResult.insertedId)
+
       return client;
     },
     updateClient: async (_: any, { id, name, email, phone}: any, { dataSources }: any) => {
