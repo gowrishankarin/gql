@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { MongoClient } from "mongodb";
 
 mongoose.connection.once("open", () => {
   console.log("MongoDB connected");
@@ -14,11 +15,15 @@ export const mongoConnect = async () => {
   };
 
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, clientOptions);
-    await mongoose.connection.db.admin().command({ ping: 1 });
+    const client = new MongoClient(process.env.MONGO_URI)
+    const connection: MongoClient = await client.connect();
+
     console.log(
-      `Pinged your deployment. You successfully connected to MongoDB! at `
+      `Pinged your deployment. You successfully connected to MongoDB! at ${
+        (client as any).s.url
+      }`
     );
+    return client;
   } catch (err) {
     console.log("MongoDB Connection Error: " + err);
   } finally {

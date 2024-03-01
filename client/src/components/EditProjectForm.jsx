@@ -8,16 +8,18 @@ function EditProjectForm({ project }) {
   const [name, setName] = useState(project.name);
   const [description, setDescription] = useState(project.description);
   const [status, setStatus] = useState(() => {
-    switch (project.status) {
-      case "Not Started":
-        return "new";
-      case "In Progress":
-        return "progress";
-      case "Completed":
-        return "completed";
-      default:
-        throw new Error(`Unknown status: ${project.status}`);
-    }
+    return project.status;
+    // TODO: Bring back ProjectStatus enum
+    // switch (project.status) {
+    //   case "Not Started":
+    //     return "new";
+    //   case "In Progress":
+    //     return "progress";
+    //   case "Completed":
+    //     return "completed";
+    //   default:
+    //     throw new Error(`Unknown status: ${project.status}`);
+    // }
   });
 
   const [updateProject] = useMutation(UPDATE_PROJECT, {
@@ -46,7 +48,9 @@ function EditProjectForm({ project }) {
             className="form-control"
             id="name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
           />
         </div>
         <div className="mb-3">
@@ -55,7 +59,9 @@ function EditProjectForm({ project }) {
             className="form-control"
             id="description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
           ></textarea>
         </div>
         <div className="mb-3">
@@ -64,7 +70,9 @@ function EditProjectForm({ project }) {
             id="status"
             className="form-select"
             value={status}
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={(e) => {
+              setStatus(e.target.value);
+            }}
           >
             <option value="new">Not Started</option>
             <option value="progress">In Progress</option>
@@ -80,4 +88,4 @@ function EditProjectForm({ project }) {
   );
 }
 
-export default EditProjectForm
+export default EditProjectForm;

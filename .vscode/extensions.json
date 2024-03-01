@@ -16,7 +16,9 @@
     "eamodio.gitlens",
     "christian-kohler.npm-intellisense",
     "tabnine.tabnine-vscode",
-    "streetsidesoftware.code-spell-checker"
-
+    "streetsidesoftware.code-spell-checker",
+    "graphql.vscode-graphql",
+    "graphql.vscode-graphql",
+    "apollographql.vscode-apollo",
   ]
 }
