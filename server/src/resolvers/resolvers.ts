@@ -70,9 +70,9 @@ export const resolvers = {
       return client;
     },
     deleteClient: async (_: any, { id }: any, { dataSources }: any) => {
+      const client = await dataSources.clientAPI.getClient(id);
       const deleteResult = await dataSources.clientAPI.delete(id);
-      console.log({deleteResult})
-      return { id };
+      return client;
     }
   },
   Project: {

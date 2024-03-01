@@ -1,5 +1,5 @@
 import { MongoDataSource  } from "apollo-datasource-mongodb";
-import { UpdateResult, DeleteResult, InsertOneResult } from "mongodb";
+import { UpdateResult, DeleteResult, InsertOneResult, ObjectId, Filter } from "mongodb";
 import { model, Schema, Types } from 'mongoose';
 
 
@@ -63,9 +63,9 @@ class ClientAPI extends MongoDataSource<ClientDocument> {
     return result;
   }
 
-  delete(id: ObjectId): Promise<DeleteResult | null> {
-    const result = this.collection.deleteOne({ "_id": id });
-
+  async delete(id: string): Promise<DeleteResult | null> {
+    const filter: Filter<ClientDocument> = { "_id": new ObjectId(id) };
+    const result = await this.collection.deleteOne(filter);
     return result;
   }
 }
