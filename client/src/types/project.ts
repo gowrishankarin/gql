@@ -4,7 +4,7 @@ import { ProjectStatus } from "../constants/projectManagementConstants";
 export type Project = {
   id: string;
   name: string;
-  status: ProjectStatus;
+  status: String;
   description: string;
   client: Client;
 };

@@ -53,13 +53,16 @@ class ProjectAPI extends MongoDataSource<ProjectDocument> {
     description,
     status,
     clientId,
-  }): Promise<ProjectDocument | null> {
+  }): Promise<InsertOneResult<ProjectDocument | null>> {
     try {
-      const project = new Project({ name, description, status, clientId });
-      const result = this.collection.insertOne(project as ProjectDocument, {
-        forceServerObjectId: false,
-      });
-      return project;
+      // const project = new Project({ name, description, status, clientId });
+      const result = this.collection.insertOne(
+        { name, description, status, clientId } as ProjectDocument,
+        {
+          forceServerObjectId: false,
+        }
+      );
+      return result;
     } catch (error) {
       console.log({ error });
       return error;
@@ -80,7 +83,8 @@ class ProjectAPI extends MongoDataSource<ProjectDocument> {
           description,
           status,
         },
-      }
+      },
+      { upsert: false }
     );
 
     return result;

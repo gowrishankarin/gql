@@ -23,14 +23,22 @@ export const resolvers = {
       { name, description, status, clientId }: any,
       { dataSources }: any
     ) => {
-      const project = await dataSources.projectAPI.create({
+      console.log({
+        name,
+        description,
+        status,
+        clientId,
+      });
+      const createResult = await dataSources.projectAPI.create({
         name,
         description,
         status,
         clientId,
       });
 
-      console.log({ project });
+      const project = await dataSources.projectAPI.getProject(
+        createResult.insertedId
+      );
       return project;
     },
     updateProject: async (
