@@ -48,9 +48,9 @@ export const resolvers = {
       return project;
     },
     deleteProject: async (_: any, { id }: any, { dataSources }: any) => {
+      const deletedProject = await dataSources.projectAPI.getProject(id);
       const deleteResult = await dataSources.projectAPI.delete(id);
-      console.log({deleteResult})
-      return { id };
+      return deletedProject;
     },
     addClient: async (_: any, {name, email, phone}: any, { dataSources }: any) => {
       const createResult = await dataSources.clientAPI.create({

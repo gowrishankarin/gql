@@ -1,7 +1,13 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb';
 import { model, Schema, Types } from 'mongoose';
 
-import { DeleteResult, ObjectId, UpdateResult } from 'mongodb';
+import {
+  UpdateResult,
+  DeleteResult,
+  InsertOneResult,
+  ObjectId,
+  Filter,
+} from "mongodb";
 
 interface ProjectDocument {
   _id: ObjectId;
@@ -9,7 +15,6 @@ interface ProjectDocument {
   description: string;
   status: string;
   clientId: ObjectId;
-
 }
 
 const ProjectSchema = new Schema<ProjectDocument>({
@@ -24,37 +29,39 @@ const ProjectSchema = new Schema<ProjectDocument>({
   },
   clientId: {
     type: ObjectId,
-    ref: 'Client'
+    ref: "Client",
   },
 });
 
-const Project = model<ProjectDocument>('Project', ProjectSchema);
+const Project = model<ProjectDocument>("Project", ProjectSchema);
 
 class ProjectAPI extends MongoDataSource<ProjectDocument> {
   constructor(options) {
     super(options);
   }
-  getProject(projectId: string): Promise<ProjectDocument | null>  {
+  getProject(projectId: string): Promise<ProjectDocument | null> {
     return this.findOneById(projectId);
   }
 
   async findAll(): Promise<ProjectDocument[]> {
     const projectsCursor = this.collection.find({});
-    return await projectsCursor.toArray()
+    return await projectsCursor.toArray();
   }
 
   async create({
-    name, description, status, clientId
+    name,
+    description,
+    status,
+    clientId,
   }): Promise<ProjectDocument | null> {
     try {
-      const project = new Project({ name, description, status, clientId})
+      const project = new Project({ name, description, status, clientId });
       const result = this.collection.insertOne(project as ProjectDocument, {
         forceServerObjectId: false,
       });
       return project;
-
     } catch (error) {
-      console.log({error});
+      console.log({ error });
       return error;
     }
   }
@@ -66,21 +73,24 @@ class ProjectAPI extends MongoDataSource<ProjectDocument> {
     status,
     clientId,
   }): Promise<UpdateResult<ProjectDocument>> {
-    const result = this.collection.updateOne({ "_id": id }, {
-      $set: {
-        name,
-        description,
-        status,
-        clientId,
-      },
-    });
+    const result = this.collection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          name,
+          description,
+          status,
+          clientId,
+        },
+      }
+    );
 
-    console.log({result})
     return result;
   }
 
-  async delete(id: ObjectId): Promise<DeleteResult | null> {
-    const result = this.collection.deleteOne({ "_id": id });
+  async delete(id: string): Promise<DeleteResult | null> {
+    const filter: Filter<ProjectDocument> = { _id: new ObjectId(id) };
+    const result = this.collection.deleteOne(filter);
 
     return result;
   }
