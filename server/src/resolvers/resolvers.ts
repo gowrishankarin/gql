@@ -18,6 +18,19 @@ export const resolvers = {
     },
   },
   Mutation: {
+    signUpGoogle: async (
+      _: any,
+      { accessToken }: any,
+      { dataSources, req, res }: any
+    ) => {
+      const user = dataSources.userAPI.maybeSignUpGoogle(accessToken, req, res);
+      return {
+        ...user,
+        message: "Authenticated",
+        accessToken: `Bearer ${accessToken}`,
+        refreshToken: `Bearer refreshToken`,
+      };
+    },
     addProject: async (
       _: any,
       { name, description, status, clientId }: any,
