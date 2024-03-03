@@ -1,4 +1,4 @@
-
+import jwt, { SignOptions } from "jsonwebtoken";
 
 export const resolvers = {
   Query: {
@@ -23,11 +23,24 @@ export const resolvers = {
       { accessToken }: any,
       { dataSources, req, res }: any
     ) => {
-      const user = dataSources.userAPI.maybeSignUpGoogle(accessToken, req, res);
+      const user = await dataSources.userAPI.maybeSignUpGoogle(
+        accessToken,
+        req,
+        res
+      );
+
+      console.log({ user });
+
+      const token = jwt.sign(user, process.env.JWT_SECRET, {
+        algorithm: "HS256",
+        subject: user.providerId as string,
+        expiresIn: "2 days",
+      } as SignOptions);
+
       return {
-        ...user,
+        // ...user,
         message: "Authenticated",
-        accessToken: `Bearer ${accessToken}`,
+        accessToken: token,
         refreshToken: `Bearer refreshToken`,
       };
     },
@@ -131,4 +144,3 @@ export const resolvers = {
     },
   },
 };
-

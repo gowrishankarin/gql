@@ -25,6 +25,7 @@
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "https": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^5.9.2",
     "mongoose": "^8.1.1",
     "passport": "^0.7.0",
