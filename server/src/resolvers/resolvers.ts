@@ -29,7 +29,7 @@ export const resolvers = {
         res
       );
 
-      console.log({ user });
+      // console.log({ user });
 
       const token = jwt.sign(user, process.env.JWT_SECRET, {
         algorithm: "HS256",

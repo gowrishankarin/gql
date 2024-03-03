@@ -13,44 +13,49 @@ function Login() {
   });
 
   useEffect(() => {
-    if(accessToken) {
-      signUpGoogle(accessToken)
+    if (accessToken) {
+      signUpGoogle(accessToken);
 
-      if(data && !error) {
-        console.log('Success');
+      if (data && !error) {
+        console.log("Success");
+        localStorage.setItem("auth", JSON.stringify({ ...data.signUpGoogle }));
       }
 
-      if(loading) {
-        console.log('Loading')
+      if (loading) {
+        console.log("Loading");
       }
 
-      if(error) {
-        console.log(error)
-        setAccessToken(null)
+      if (error) {
+        console.log(error);
+        setAccessToken(null);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken]);
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: (response) => {
       setAccessToken(response.access_token);
-    }, 
+    },
     onError: (error) => {
       console.log(error);
-    }
-  })
+    },
+  });
+
+  const signout = () => {
+    localStorage.removeItem("auth");
+  };
 
   return (
     <>
-      <FcGoogle 
+      <FcGoogle
         onClick={handleGoogleLogin}
         style={{
-          fontSize: '1.5rem',
+          fontSize: "1.5rem",
         }}
       />
     </>
-  )
+  );
 }
 
-export default Login
+export default Login;

@@ -26,13 +26,13 @@ async function startApolloServer() {
     res: express.Response;
   }) => {
     const token = req.headers.authorization || "";
-    const userId = token.split(" ")[1];
-    let userInfo = {};
+    const accessToken = token.split(" ")[1];
+    let currentUser = {};
 
-    if (userId) {
-      userInfo = { userId: "Shankar", userRole: "Host" };
+    if (accessToken) {
+      currentUser = req.auth ? req.auth : null;
     }
-    return getContext(client, userInfo, req, res);
+    return getContext({ client, currentUser, req, res });
   };
 
   const server = await new ApolloServer({

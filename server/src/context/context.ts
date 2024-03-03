@@ -2,10 +2,10 @@ import ProjectAPI from "../datasources/project.api";
 import ClientAPI from "../datasources/client.api";
 import UserAPI from "../datasources/user.api";
 
-export function getContext(client, userInfo, req, res) {
+export function getContext({ client, currentUser, req, res }) {
   // const { cache } = this;
   return {
-    ...userInfo,
+    currentUser,
     req: req,
     res: res,
     dataSources: {

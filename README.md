@@ -71,6 +71,9 @@ https://github.com/mandiwise/basic-apollo-auth-demo/blob/main/src/index.js
 How to migrate from `@apollo/server` to `apollo-server-express`
 https://www.apollographql.com/docs/apollo-server/migration#migrate-from-apollo-server-express
 
+How to secure the queries and mutations
+https://youtu.be/dBuU61ABEDs?t=790
+
 
 ## Roadmap
 
