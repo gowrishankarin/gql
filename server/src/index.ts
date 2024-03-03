@@ -9,11 +9,9 @@ import http from "http";
 import { typeDefs } from "./schema/scheman";
 import { resolvers } from "./resolvers/resolvers";
 import { mongoConnect } from "./config/db";
+import { getContext } from "./context/context";
 const PORT = process.env.PORT || 5000;
 
-import ProjectAPI from "./datasources/project.api";
-import ClientAPI from "./datasources/client.api";
-import UserAPI from "./datasources/user.api";
 import app from "./app";
 
 async function startApolloServer() {
@@ -34,26 +32,7 @@ async function startApolloServer() {
     if (userId) {
       userInfo = { userId: "Shankar", userRole: "Host" };
     }
-    // const { cache } = this;
-    return {
-      ...userInfo,
-      req: req,
-      res: res,
-      dataSources: {
-        userAPI: new UserAPI({
-          modelOrCollection: client.db().collection("users"),
-          // cache,
-        }),
-        projectAPI: new ProjectAPI({
-          modelOrCollection: client.db().collection("projects"),
-          // cache,
-        }),
-        clientAPI: new ClientAPI({
-          modelOrCollection: client.db().collection("clients"),
-          // cache,
-        }),
-      },
-    };
+    return getContext(client, userInfo, req, res);
   };
 
   const server = await new ApolloServer({
@@ -66,14 +45,13 @@ async function startApolloServer() {
   server.applyMiddleware({ app });
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: PORT }, () => {
-      resolve();
-    })
-  );
-
-  console.log(`
+      console.log(`
     🚀  Server is running!
     📭  Query at ${url}
   `);
+      resolve();
+    })
+  );
 
   return { server, url };
 }
