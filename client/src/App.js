@@ -1,11 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+} from "@apollo/client";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import Header from "./components/Header";
-import Home from './pages/Home';
-import NotFound from './pages/NotFound';
-import Project from './pages/Project';
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
+import Project from "./pages/Project";
+import { authHeader } from "./components/oauth2/auth.header";
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -14,22 +20,27 @@ const cache = new InMemoryCache({
         clients: {
           merge(existing, incoming) {
             return incoming;
-          }
+          },
         },
         projects: {
           merge(existing, incoming) {
             return incoming;
-          }
-        }
-      }
-    }
-  }
-})
+          },
+        },
+      },
+    },
+  },
+});
+
+const httpLink = new HttpLink({
+  uri: "http://localhost:4000/graphql",
+  headers: authHeader(),
+});
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  link: httpLink,
   cache,
-})
+});
 
 function App() {
   return (
