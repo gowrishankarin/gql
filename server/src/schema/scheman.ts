@@ -47,7 +47,8 @@ export const typeDefs = gql`
 
   type AccessTokens {
     accessToken: String!
-    refreshToken: String!
+    displayName: String!
+    pictureUrl: String!
     message: String!
   }
 `;

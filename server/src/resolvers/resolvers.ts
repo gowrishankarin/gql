@@ -29,8 +29,9 @@ export const resolvers = {
         res
       );
 
-      // console.log({ user });
+      console.log({ user });
 
+      // TODO: Move this to utils.
       const token = jwt.sign(user, process.env.JWT_SECRET, {
         algorithm: "HS256",
         subject: user.providerId as string,
@@ -38,10 +39,10 @@ export const resolvers = {
       } as SignOptions);
 
       return {
-        // ...user,
+        displayName: user.displayName,
+        pictureUrl: user.picture,
         message: "Authenticated",
         accessToken: token,
-        refreshToken: `Bearer refreshToken`,
       };
     },
     addProject: async (
