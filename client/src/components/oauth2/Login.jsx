@@ -17,8 +17,8 @@ function Login() {
       signUpGoogle(accessToken);
 
       if (data && !error) {
-        console.log("Success");
-        localStorage.setItem("auth", JSON.stringify({ ...data.signUpGoogle }));
+        const accessToken = data.signUpGoogle.accessToken;
+        localStorage.setItem("auth", JSON.stringify({ accessToken }));
       }
 
       if (loading) {
