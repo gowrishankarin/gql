@@ -27,11 +27,17 @@ async function startApolloServer() {
   }) => {
     const token = req.headers.authorization || "";
     const accessToken = token.split(" ")[1];
-    let currentUser = {};
+    let currentUser = null;
 
     if (accessToken) {
       currentUser = req.auth ? req.auth : null;
+      // const profile = await client
+      //   .db()
+      //   .collection("users")
+      //   .findOne({ _id: currentUser.id });
+      // console.log({ currentUser, profile: profile });
     }
+
     return getContext({ client, currentUser, req, res });
   };
 

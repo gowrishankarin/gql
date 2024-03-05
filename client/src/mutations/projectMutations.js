@@ -24,15 +24,20 @@ const ADD_PROJECT = gql`
       description: $description
       clientId: $clientId
     ) {
-      id
-      name
-      status
-      description
-      client {
+      code
+      success
+      message
+      project {
         id
         name
-        email
-        phone
+        status
+        description
+        client {
+          id
+          name
+          email
+          phone
+        }
       }
     }
   }

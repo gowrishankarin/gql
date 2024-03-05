@@ -1,4 +1,5 @@
 import jwt, { SignOptions } from "jsonwebtoken";
+import { AuthenticationError, ForbiddenError } from "../errors/auth.errors";
 
 export const resolvers = {
   Query: {
@@ -34,7 +35,7 @@ export const resolvers = {
       // TODO: Move this to utils.
       const token = jwt.sign(user, process.env.JWT_SECRET, {
         algorithm: "HS256",
-        subject: user.providerId as string,
+        subject: user._id.toString(),
         expiresIn: "2 days",
       } as SignOptions);
 
@@ -48,30 +49,44 @@ export const resolvers = {
     addProject: async (
       _: any,
       { name, description, status, clientId }: any,
-      { dataSources }: any
+      { dataSources, currentUser }: any
     ) => {
-      console.log({
-        name,
-        description,
-        status,
-        clientId,
-      });
-      const createResult = await dataSources.projectAPI.create({
-        name,
-        description,
-        status,
-        clientId,
-      });
+      try {
+        if (!currentUser) {
+          throw AuthenticationError(
+            "You are not authenticated to perform this action."
+          );
+        }
 
-      const project = await dataSources.projectAPI.getProject(
-        createResult.insertedId
-      );
-      return project;
+        const createResult = await dataSources.projectAPI.create({
+          name,
+          description,
+          status,
+          clientId,
+        });
+
+        const project = await dataSources.projectAPI.getProject(
+          createResult.insertedId
+        );
+        return {
+          code: 200,
+          success: true,
+          message: `Successfully created the project ${project.id}`,
+          project,
+        };
+      } catch (err) {
+        return {
+          code: err.extensions.response.status,
+          success: false,
+          message: err.extensions.response.body,
+          track: null,
+        };
+      }
     },
     updateProject: async (
       _: any,
       { id, name, description, status }: any,
-      { dataSources }: any
+      { dataSources, currentUser }: any
     ) => {
       const updateResult = await dataSources.projectAPI.update({
         id,
@@ -83,7 +98,11 @@ export const resolvers = {
       const project = await dataSources.projectAPI.getProject(id);
       return project;
     },
-    deleteProject: async (_: any, { id }: any, { dataSources }: any) => {
+    deleteProject: async (
+      _: any,
+      { id }: any,
+      { dataSources, currentUser }: any
+    ) => {
       const deletedProject = await dataSources.projectAPI.getProject(id);
       const deleteResult = await dataSources.projectAPI.delete(id);
       return deletedProject;
@@ -91,7 +110,7 @@ export const resolvers = {
     addClient: async (
       _: any,
       { name, email, phone }: any,
-      { dataSources }: any
+      { dataSources, currentUser }: any
     ) => {
       const createResult = await dataSources.clientAPI.create({
         name,
@@ -108,7 +127,7 @@ export const resolvers = {
     updateClient: async (
       _: any,
       { id, name, email, phone }: any,
-      { dataSources }: any
+      { dataSources, currentUser }: any
     ) => {
       const updateResult = await dataSources.clientAPI.update({
         id,
@@ -120,7 +139,11 @@ export const resolvers = {
       const client = await dataSources.clientAPI.getClient(id);
       return client;
     },
-    deleteClient: async (_: any, { id }: any, { dataSources }: any) => {
+    deleteClient: async (
+      _: any,
+      { id }: any,
+      { dataSources, currentUser }: any
+    ) => {
       const client = await dataSources.clientAPI.getClient(id);
       const deleteResult = await dataSources.clientAPI.delete(id);
       return client;

@@ -18,10 +18,6 @@ function Login() {
   });
 
   useEffect(() => {
-    if (accessToken) {
-      signUpGoogle(accessToken);
-    }
-
     if (data && !error) {
       // TODO: Why intermediate signUoGoogle object
       const { accessToken, pictureUrl, message, displayName } =
@@ -43,8 +39,15 @@ function Login() {
       console.log(error);
       setAccessToken(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, error, loading]);
 
-    if (getCurrentUser() !== undefined) {
+  useEffect(() => {
+    if (accessToken) {
+      signUpGoogle(accessToken);
+    }
+
+    if (getCurrentUser()) {
       setCurrentUser(getCurrentUser());
     }
 
