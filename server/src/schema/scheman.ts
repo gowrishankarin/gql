@@ -26,9 +26,15 @@ export const typeDefs = gql`
 
     deleteProject(id: ID!): ProjectResponse
 
-    addClient(name: String!, email: String!, phone: String!): Client
-    updateClient(id: ID!, name: String, email: String, phone: String): Client
-    deleteClient(id: ID!): Client
+    addClient(name: String!, email: String!, phone: String!): ClientResponse
+    updateClient(
+      id: ID!
+      name: String
+      email: String
+      phone: String
+    ): ClientResponse
+    deleteClient(id: ID!): ClientResponse
+
     signUpGoogle(accessToken: String!): AccessTokens!
   }
 
@@ -52,6 +58,13 @@ export const typeDefs = gql`
     name: String!
     email: String!
     phone: String!
+  }
+
+  type ClientResponse {
+    code: Int!
+    success: Boolean!
+    message: String!
+    client: Client
   }
 
   type AccessTokens {
