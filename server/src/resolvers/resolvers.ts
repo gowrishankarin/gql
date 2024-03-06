@@ -68,12 +68,23 @@ export const resolvers = {
         const project = await dataSources.projectAPI.getProject(
           createResult.insertedId
         );
-        return {
-          code: 200,
-          success: true,
-          message: `Successfully created the project ${project.id}`,
-          project,
-        };
+
+
+        if (createResult.modifiedCount === 1) {
+          return {
+            code: 200,
+            success: true,
+            message: `Successfully created the project ${project.id}`,
+            project,
+          };
+        } else {
+          return {
+            code: 400,
+            success: false,
+            message: `Create project failed`,
+            project: null,
+          };
+        }
       } catch (err) {
         return {
           code: err.extensions.response.status,
@@ -88,24 +99,83 @@ export const resolvers = {
       { id, name, description, status }: any,
       { dataSources, currentUser }: any
     ) => {
-      const updateResult = await dataSources.projectAPI.update({
-        id,
-        name,
-        description,
-        status,
-      });
-      console.log({ updateResult });
-      const project = await dataSources.projectAPI.getProject(id);
-      return project;
+
+      try {
+        if (!currentUser) {
+          throw AuthenticationError(
+            "You are not authenticated to perform this action."
+          );
+        }
+        const updateResult = await dataSources.projectAPI.update({
+          id,
+          name,
+          description,
+          status,
+        });
+        console.log({ updateResult });
+        const project = await dataSources.projectAPI.getProject(id);
+
+        if (updateResult.modifiedCount === 1) {
+          return {
+            code: 200,
+            success: true,
+            message: `Successfully updated the project ${project.id}`,
+            project,
+          };
+        } else {
+          return {
+            code: 400,
+            success: false,
+            message: `Update project failed ${project.id}`,
+            project: null,
+          };
+        }
+      } catch (err) {
+        return {
+          code: err.extensions.response.status,
+          success: false,
+          message: err.extensions.response.body,
+          track: null,
+        };
+      }
     },
     deleteProject: async (
       _: any,
       { id }: any,
       { dataSources, currentUser }: any
     ) => {
-      const deletedProject = await dataSources.projectAPI.getProject(id);
-      const deleteResult = await dataSources.projectAPI.delete(id);
-      return deletedProject;
+      try {
+        if (!currentUser) {
+          throw AuthenticationError(
+            "You are not authenticated to perform this action."
+          );
+        }
+        const deletedProject = await dataSources.projectAPI.getProject(id);
+        const deleteResult = await dataSources.projectAPI.delete(id);
+
+        if (deleteResult.modifiedCount === 1) {
+          return {
+            code: 200,
+            success: true,
+            message: `Successfully deleted the project ${deletedProject.id}`,
+            deletedProject,
+          };
+        } else {
+          return {
+            code: 400,
+            success: false,
+            message: `Delete project failed ${deletedProject.id}`,
+            deletedProject,
+          };
+        }
+      } catch (err) {
+        return {
+          code: err.extensions.response.status,
+          success: false,
+          message: err.extensions.response.body,
+          track: null,
+        };
+      }
     },
     addClient: async (
       _: any,

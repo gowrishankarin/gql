@@ -15,15 +15,16 @@ export const typeDefs = gql`
       description: String!
       status: String!
       clientId: ID!
-    ): AddProjectResponse!
+    ): ProjectResponse!
 
     updateProject(
       id: ID!
       name: String!
       description: String!
       status: String!
-    ): Project
-    deleteProject(id: ID!): Project
+    ): ProjectResponse
+
+    deleteProject(id: ID!): ProjectResponse
 
     addClient(name: String!, email: String!, phone: String!): Client
     updateClient(id: ID!, name: String, email: String, phone: String): Client
@@ -39,7 +40,7 @@ export const typeDefs = gql`
     client: Client
   }
 
-  type AddProjectResponse {
+  type ProjectResponse {
     code: Int!
     success: Boolean!
     message: String!

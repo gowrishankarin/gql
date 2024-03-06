@@ -13,6 +13,7 @@ import { getContext } from "./context/context";
 const PORT = process.env.PORT || 5000;
 
 import app from "./app";
+import { AuthorizedRequest } from "./types/auth";
 
 async function startApolloServer() {
   const client = await mongoConnect();
@@ -22,12 +23,14 @@ async function startApolloServer() {
     req,
     res,
   }: {
-    req: express.Request;
+    req: AuthorizedRequest;
     res: express.Response;
   }) => {
     const token = req.headers.authorization || "";
     const accessToken = token.split(" ")[1];
     let currentUser = null;
+
+    // console.log({ accessToken });
 
     if (accessToken) {
       currentUser = req.auth ? req.auth : null;
@@ -37,6 +40,7 @@ async function startApolloServer() {
       //   .findOne({ _id: currentUser.id });
       // console.log({ currentUser, profile: profile });
     }
+    // console.log({ currentUser });
 
     return getContext({ client, currentUser, req, res });
   };

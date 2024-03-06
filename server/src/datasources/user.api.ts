@@ -57,7 +57,7 @@ const UserSchema = new Schema<UserDocument>({
   },
 });
 
-const User = model<UserDocument>("User", UserSchema);
+export const User = model<UserDocument>("User", UserSchema);
 
 class UserAPI extends MongoDataSource<UserDocument> {
   constructor(options) {
