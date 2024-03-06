@@ -1,4 +1,5 @@
 import jwt, { SignOptions } from "jsonwebtoken";
+import { AuthenticationError, ForbiddenError } from "../errors/auth.errors";
 
 export const resolvers = {
   Query: {
@@ -29,100 +30,283 @@ export const resolvers = {
         res
       );
 
-      // console.log({ user });
+      console.log({ user });
 
+      // TODO: Move this to utils.
       const token = jwt.sign(user, process.env.JWT_SECRET, {
         algorithm: "HS256",
-        subject: user.providerId as string,
+        subject: user._id.toString(),
         expiresIn: "2 days",
       } as SignOptions);
 
       return {
-        // ...user,
+        displayName: user.displayName,
+        pictureUrl: user.picture,
         message: "Authenticated",
         accessToken: token,
-        refreshToken: `Bearer refreshToken`,
       };
     },
     addProject: async (
       _: any,
       { name, description, status, clientId }: any,
-      { dataSources }: any
+      { dataSources, currentUser }: any
     ) => {
-      console.log({
-        name,
-        description,
-        status,
-        clientId,
-      });
-      const createResult = await dataSources.projectAPI.create({
-        name,
-        description,
-        status,
-        clientId,
-      });
+      try {
+        if (!currentUser) {
+          throw AuthenticationError(
+            "You are not authenticated to perform this action."
+          );
+        }
 
-      const project = await dataSources.projectAPI.getProject(
-        createResult.insertedId
-      );
-      return project;
+        const createResult = await dataSources.projectAPI.create({
+          name,
+          description,
+          status,
+          clientId,
+        });
+
+        const project = await dataSources.projectAPI.getProject(
+          createResult.insertedId
+        );
+
+
+        if (createResult.insertedId) {
+          return {
+            code: 200,
+            success: true,
+            message: `Successfully created the project ${project.id}`,
+            project,
+          };
+        } else {
+          return {
+            code: 400,
+            success: false,
+            message: `Create project failed`,
+            project: null,
+          };
+        }
+      } catch (err) {
+        return {
+          code: err.extensions.response.status,
+          success: false,
+          message: err.extensions.response.body,
+          project: null,
+        };
+      }
     },
     updateProject: async (
       _: any,
       { id, name, description, status }: any,
-      { dataSources }: any
+      { dataSources, currentUser }: any
     ) => {
-      const updateResult = await dataSources.projectAPI.update({
-        id,
-        name,
-        description,
-        status,
-      });
-      console.log({ updateResult });
-      const project = await dataSources.projectAPI.getProject(id);
-      return project;
+
+      try {
+        if (!currentUser) {
+          throw AuthenticationError(
+            "You are not authenticated to perform this action."
+          );
+        }
+        const updateResult = await dataSources.projectAPI.update({
+          id,
+          name,
+          description,
+          status,
+        });
+        console.log({ updateResult });
+        const project = await dataSources.projectAPI.getProject(id);
+
+        if (updateResult.modifiedCount === 1) {
+          return {
+            code: 200,
+            success: true,
+            message: `Successfully updated the project ${project.id}`,
+            project,
+          };
+        } else {
+          return {
+            code: 400,
+            success: false,
+            message: `Update project failed ${project.id}`,
+            project: null,
+          };
+        }
+      } catch (err) {
+        return {
+          code: err.extensions.response.status,
+          success: false,
+          message: err.extensions.response.body,
+          project: null,
+        };
+      }
     },
-    deleteProject: async (_: any, { id }: any, { dataSources }: any) => {
-      const deletedProject = await dataSources.projectAPI.getProject(id);
-      const deleteResult = await dataSources.projectAPI.delete(id);
-      return deletedProject;
+    deleteProject: async (
+      _: any,
+      { id }: any,
+      { dataSources, currentUser }: any
+    ) => {
+      try {
+        if (!currentUser) {
+          throw AuthenticationError(
+            "You are not authenticated to perform this action."
+          );
+        }
+        const deletedProject = await dataSources.projectAPI.getProject(id);
+        const deleteResult = await dataSources.projectAPI.delete(id);
+
+        if (deleteResult.deletedCount === 1) {
+          return {
+            code: 200,
+            success: true,
+            message: `Successfully deleted the project ${deletedProject.id}`,
+            deletedProject,
+          };
+        } else {
+          return {
+            code: 400,
+            success: false,
+            message: `Delete project failed ${deletedProject.id}`,
+            deletedProject,
+          };
+        }
+      } catch (err) {
+        return {
+          code: err.extensions.response.status,
+          success: false,
+          message: err.extensions.response.body,
+          project: null,
+        };
+      }
     },
     addClient: async (
       _: any,
       { name, email, phone }: any,
-      { dataSources }: any
+      { dataSources, currentUser }: any
     ) => {
-      const createResult = await dataSources.clientAPI.create({
-        name,
-        email,
-        phone,
-      });
 
-      const client = await dataSources.clientAPI.getClient(
-        createResult.insertedId
-      );
+      try {
+        if (!currentUser) {
+          throw AuthenticationError(
+            "You are not authenticated to perform this action."
+          );
+        }
 
-      return client;
+        const createResult = await dataSources.clientAPI.create({
+          name,
+          email,
+          phone,
+        });
+
+        const client = await dataSources.clientAPI.getClient(
+          createResult.insertedId
+        );
+
+        console.log({ createResult });
+
+        if (createResult.insertedId) {
+          return {
+            code: 200,
+            success: true,
+            message: `Successfully created the project ${client.id}`,
+            client,
+          };
+        } else {
+          return {
+            code: 400,
+            success: false,
+            message: `Create project failed`,
+            client: null,
+          };
+        }
+      } catch (err) {
+        return {
+          code: err.extensions.response.status,
+          success: false,
+          message: err.extensions.response.body,
+          client: null,
+        };
+      }
     },
     updateClient: async (
       _: any,
       { id, name, email, phone }: any,
-      { dataSources }: any
+      { dataSources, currentUser }: any
     ) => {
-      const updateResult = await dataSources.clientAPI.update({
-        id,
-        name,
-        email,
-        phone,
-      });
-      console.log({ updateResult });
-      const client = await dataSources.clientAPI.getClient(id);
-      return client;
+
+      try {
+        if (!currentUser) {
+          throw AuthenticationError(
+            "You are not authenticated to perform this action."
+          );
+        }
+        const updateResult = await dataSources.clientAPI.update({
+          id,
+          name,
+          email,
+          phone,
+        });
+        console.log({ updateResult });
+        const client = await dataSources.clientAPI.getClient(id);
+        if (updateResult.modifiedCount === 1) {
+          return {
+            code: 200,
+            success: true,
+            message: `Successfully updated the client ${client.id}`,
+            client,
+          };
+        } else {
+          return {
+            code: 400,
+            success: false,
+            message: `Update client failed ${client.id}`,
+            client: null,
+          };
+        }
+      } catch (err) {
+        return {
+          code: err.extensions.response.status,
+          success: false,
+          message: err.extensions.response.body,
+          client: null,
+        };
+      }
     },
-    deleteClient: async (_: any, { id }: any, { dataSources }: any) => {
-      const client = await dataSources.clientAPI.getClient(id);
-      const deleteResult = await dataSources.clientAPI.delete(id);
-      return client;
+    deleteClient: async (
+      _: any,
+      { id }: any,
+      { dataSources, currentUser }: any
+    ) => {
+      try {
+        if (!currentUser) {
+          throw AuthenticationError(
+            "You are not authenticated to perform this action."
+          );
+        }
+        const client = await dataSources.clientAPI.getClient(id);
+        const deleteResult = await dataSources.clientAPI.delete(id);
+        console.log({ deleteResult });
+        if (deleteResult.deletedCount === 1) {
+          return {
+            code: 200,
+            success: true,
+            message: `Successfully deleted the client ${client.id}`,
+            client,
+          };
+        } else {
+          return {
+            code: 400,
+            success: false,
+            message: `Delete client failed ${client.id}`,
+            client: null,
+          };
+        }
+      } catch (err) {
+        return {
+          code: err.extensions.response.status,
+          success: false,
+          message: err.extensions.response.body,
+          client: null,
+        };
+      }
     },
   },
   Project: {
