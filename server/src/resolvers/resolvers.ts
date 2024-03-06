@@ -296,7 +296,7 @@ export const resolvers = {
             code: 400,
             success: false,
             message: `Delete client failed ${client.id}`,
-            client,
+            client: null,
           };
         }
       } catch (err) {
