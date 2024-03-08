@@ -92,7 +92,8 @@ class UserAPI extends MongoDataSource<UserDocument> {
     };
 
     console.log("Going to call authenticateGoogle");
-    const data = await authenticateGoogle(req, res);
+    // TODO: Get rid of any usage
+    const data: any = await authenticateGoogle(req, res);
     console.log("Called authenticateGoogle");
 
     const email = data._json.email.toLowerCase().replace(/ /gi, "");
@@ -113,7 +114,7 @@ class UserAPI extends MongoDataSource<UserDocument> {
         hd: data._json.hd,
       } as UserDocument;
 
-      user = await this.create(newUser);
+      return await this.create(newUser);
     }
 
     return user;
