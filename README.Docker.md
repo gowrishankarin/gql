@@ -20,3 +20,5 @@ docs for more detail on building and pushing.
 
 ### References
 * [Docker's Node.js guide](https://docs.docker.com/language/nodejs/)
+* [Docker + ReactJS tutorial: Development to Production workflow + multi-stage builds + docker compose](https://www.youtube.com/watch?v=3xDAU5cvi5E)
+

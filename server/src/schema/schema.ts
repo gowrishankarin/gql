@@ -1,11 +1,11 @@
-const { projects, clients } = require("../../sampleData.js");
+// import { projects, clients } from "../../sampleData.js";
 
 import Project from "../models/Project";
 import Client from "../models/Client";
 import authenticateGoogle from "../auth/google.auth";
 import getGoogleProfile from "../auth/google.profile";
 
-const {
+import {
   GraphQLObjectType,
   GraphQLID,
   GraphQLString,
@@ -13,7 +13,7 @@ const {
   GraphQLList,
   GraphQLNonNull,
   GraphQLEnumType,
-} = require("graphql");
+} from "graphql";
 
 // Auth Response type
 const AuthTokensType = new GraphQLObjectType({
@@ -89,7 +89,7 @@ const RootQuery = new GraphQLObjectType({
       type: ClientType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return clients.findById(parent.clientId);
+        return null;
       },
     },
   },

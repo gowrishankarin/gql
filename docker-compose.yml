@@ -7,15 +7,17 @@
 # You can add other services your application may depend on here, such as a
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
+version: '3.8'
 services:
   server:
     stdin_open: true
     tty: true
     container_name: curiosity-server
-    env_file: docker/server/dev/.env
+    env_file: ./.env
     build:
-      context: .
-      dockerfile: docker/server/dev/Dockerfile
+      context: ./server
+      dockerfile: ./docker/dev/Dockerfile
+      # target: base
     environment:
       NODE_ENV: ${NODE_ENV}
       HTTP_ORIGIN: https://localhost:3000
@@ -23,12 +25,16 @@ services:
       ORIGIN_PORT: ${ORIGIN_PORT}
       MONGO_URI: $MONGO_URI}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      JWT_SECRET: ${JWT_SECRET}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      JWT_SECRET: $JWT_SECRET
+    # command: ['npm', 'run', 'dev']
+    expose:
+      - '4000'
     ports:
-      - 4000:4000
-    # volumes:
-    #   - ./app:/server
+      - '4000:4000'
+    volumes:
+      - ./server:/server
+
   # client:
   #   build:
   #     context: .
