@@ -21,8 +21,8 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV}
       HTTP_ORIGIN: https://localhost:3000
-      PORT: ${PORT}
-      ORIGIN_PORT: ${ORIGIN_PORT}
+      PORT: ${SERVER_PORT}
+      ORIGIN_PORT: ${CLIENT_PORT}
       MONGO_URI: $MONGO_URI}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       JWT_SECRET: ${JWT_SECRET}
@@ -44,6 +44,8 @@ services:
       dockerfile: ./docker/dev/Dockerfile
     environment:
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      PORT: ${CLIENT_PORT}
+      SERVER_PORT: ${SERVER_PORT}
     expose:
       - '3000'
     ports:
