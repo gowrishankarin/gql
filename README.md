@@ -3,9 +3,9 @@
 ### Env file
 
 ```
-PORT = 4000
-ORIGIN_PORT=3000
-NODE_ENV = 'development'
+SERVER_PORT = 4000
+CLIENT_PORT=3000
+NODE_ENV =development
 MONGO_URI=mongodb+srv://<username>:<password>@cluster0.ihyay.mongodb.net/gql?retryWrites=true&w=majority
 GOOGLE_CLIENT_ID=<Google Client Id>
 GOOGLE_CLIENT_SECRET=<Google Client Secret>

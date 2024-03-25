@@ -6,7 +6,6 @@ import { Avatar, Popover, Button } from "antd";
 
 import { SIGN_UP_GOOGLE } from "../../mutations/authMutations";
 
-import { User } from "../../types/user";
 import { getCurrentUser } from "./auth.header";
 
 function Login() {

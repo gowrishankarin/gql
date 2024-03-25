@@ -10,7 +10,7 @@ import { model, Schema, Types } from 'mongoose';
 
 
 interface ClientDocument {
-  _id: Types.ObjectId;
+  _id: ObjectId;
   name: string;
   email: string;
   phone: string;
@@ -28,49 +28,64 @@ const ClientSchema = new Schema<ClientDocument>({
   },
 });
 
-const Client = model<ClientDocument>('Client', ClientSchema);
+const Client = model<ClientDocument>("Client", ClientSchema);
 
 class ClientAPI extends MongoDataSource<ClientDocument> {
   constructor(options) {
     super(options);
   }
 
-  getClient(clientId: string): Promise<ClientDocument | null>  {
+  getClient(clientId: string): Promise<ClientDocument | null> {
     const client = this.findOneById(clientId);
     return client;
   }
 
   async findAll(): Promise<ClientDocument[]> {
     const clientsCursor = this.collection.find({});
-    return await clientsCursor.toArray()
+    return await clientsCursor.toArray();
   }
 
-  async create({ name, email, phone }): Promise<InsertOneResult<ClientDocument | null>> {
+  async create({
+    name,
+    email,
+    phone,
+  }): Promise<InsertOneResult<ClientDocument | null>> {
     try {
-      const result = await this.collection.insertOne({ name, email, phone} as ClientDocument, {
-        forceServerObjectId: false,
-      });
+      const result = await this.collection.insertOne(
+        { name, email, phone } as ClientDocument,
+        {
+          forceServerObjectId: false,
+        }
+      );
       return result;
     } catch (err) {
       return err;
     }
   }
 
-  update({ id, name, email, phone }): Promise<UpdateResult<ClientDocument | null>> {
-    const result = this.collection.updateOne({ "_id": id }, {
-      $set: {
-        name,
-        email,
-        phone,
-      },
-    });
+  update({
+    id,
+    name,
+    email,
+    phone,
+  }): Promise<UpdateResult<ClientDocument | null>> {
+    const result = this.collection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          name,
+          email,
+          phone,
+        },
+      }
+    );
 
-    console.log({result})
+    console.log({ result });
     return result;
   }
 
   async delete(id: string): Promise<DeleteResult | null> {
-    const filter: Filter<ClientDocument> = { "_id": new ObjectId(id) };
+    const filter: Filter<ClientDocument> = { _id: new ObjectId(id) };
     const result = await this.collection.deleteOne(filter);
     return result;
   }

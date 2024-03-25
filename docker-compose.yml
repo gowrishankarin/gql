@@ -1,19 +1,55 @@
-version: "3"
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
 
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+version: '3.8'
 services:
-  cosmos-be:
-    build: server
-    container_name: server
+  server:
     stdin_open: true
+    tty: true
+    container_name: curiosity-server
+    env_file: ./.env
+    build:
+      context: ./server
+      dockerfile: ./docker/dev/Dockerfile
+      # target: base
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      HTTP_ORIGIN: https://localhost:3000
+      PORT: ${SERVER_PORT}
+      ORIGIN_PORT: ${CLIENT_PORT}
+      MONGO_URI: ${MONGO_URI}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      JWT_SECRET: ${JWT_SECRET}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+    expose:
+      - '4000'
     ports:
-      - "4000:4000"
-    dns:
-      - 8.8.8.8
-      - 8.8.8.4
+      - '4000:4000'
+    volumes:
+      - ./server:/server
 
-  cosmos-fe:
-    build: client
-    container_name: client
-    restart: always
-    ports: 
-      - "3000:3000"
+  client:
+    stdin_open: true
+    tty: true
+    container_name: curiosity-client
+    env_file: ./.env
+    build:
+      context: ./client
+      dockerfile: ./docker/dev/Dockerfile
+    environment:
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      PORT: ${CLIENT_PORT}
+      SERVER_PORT: ${SERVER_PORT}
+    expose:
+      - '3000'
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./client:/client
+      - /client/node_modules
