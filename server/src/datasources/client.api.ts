@@ -10,7 +10,7 @@ import { model, Schema, Types } from 'mongoose';
 
 
 interface ClientDocument {
-  _id: Types.ObjectId;
+  _id: ObjectId;
   name: string;
   email: string;
   phone: string;
@@ -28,7 +28,7 @@ const ClientSchema = new Schema<ClientDocument>({
   },
 });
 
-const Client = model<ClientDocument>('Client', ClientSchema);
+const Client = model<ClientDocument>("Client", ClientSchema);
 
 class ClientAPI extends MongoDataSource<ClientDocument> {
   constructor(options) {
@@ -84,8 +84,8 @@ class ClientAPI extends MongoDataSource<ClientDocument> {
     return result;
   }
 
-  async delete(id): Promise<DeleteResult | null> {
-    const filter: Filter<ClientDocument> = { _id: id };
+  async delete(id: string): Promise<DeleteResult | null> {
+    const filter: Filter<ClientDocument> = { _id: new ObjectId(id) };
     const result = await this.collection.deleteOne(filter);
     return result;
   }

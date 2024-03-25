@@ -283,7 +283,7 @@ export const resolvers = {
         }
         const client = await dataSources.clientAPI.getClient(id);
         const deleteResult = await dataSources.clientAPI.delete(id);
-        console.log({ deleteResult });
+        // console.log({ deleteResult, client });
         if (deleteResult.deletedCount === 1) {
           return {
             code: 200,
